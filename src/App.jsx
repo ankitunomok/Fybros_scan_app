@@ -7,12 +7,20 @@ function App() {
   const [codes, setCodes] = useState(""); // single input field (string)
   const [loading, setLoading] = useState(false);
   const [showData, setShowData] = useState({});
+  const [error, setError] = useState("");
+  const [saveCode, setSaveCode] = useState("");
 
   // Handle QR scan → append to codes
   const handleQrScan = (value) => {
     if (!value) return;
     const newCode = value.trim();
     if (newCode === "") return;
+    if (showData?.ProductCode === newCode || saveCode === newCode) {
+      if (!error){
+      setError(newCode + " " +"already scanned");
+      }
+      return;
+    } // Don't submit if same as old
     setCodes(newCode);
     handleSubmit(newCode);
     console.log("Scanned Code:", newCode);
@@ -25,8 +33,9 @@ function App() {
   const isReady = codes.trim() !== "";
 
   const handleSubmit = async (val) => {
-    if (!isReady) {
+    if (!val) {
       console.log("No codes to submit");
+      setError("Please enter or scan a QR code");
       return;
     }
 
@@ -41,8 +50,13 @@ function App() {
         { headers: { "Content-Type": "application/json" } }
       );
       console.log("API Response:", result.data);
+      setSaveCode(val);
       if (result.data.success) {
         setShowData(result.data.data);
+        setError("");
+      } else {
+        setError(val+" "+result.data.message || "Error fetching data");
+        setShowData({});
       }
       setCodes(""); // reset field
     } catch (err) {
@@ -89,14 +103,23 @@ function App() {
       >
         {loading ? "Submitting..." : "Proceed"}
       </button>
+      {/* Error Message */}
+      {error && (
+        <div className="mt-4 p-3 bg-red-100 text-red-700 border border-red-400 rounded">
+          {error}
+        </div>
+      )}
 
       {/* Display Result */}
-     {showData && Object.keys(showData).length > 0 && (
+      {showData && Object.keys(showData).length > 0 && (
         <div className="mt-6 p-4 border rounded-lg bg-gray-50">
           {Object.entries(showData).map(([key, value]) => (
             <div key={key}>
               <h3 className="text-lg font-semibold mb-2 inline">{key}</h3>
-              <p className="text-gray-700 inline">{" : "}{value}</p>
+              <p className="text-gray-700 inline">
+                {" : "}
+                {value}
+              </p>
             </div>
           ))}
         </div>

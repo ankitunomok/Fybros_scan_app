@@ -137,7 +137,7 @@ function App() {
           <h3 className='text-lg font-semibold mb-2 inline'>SKU ID</h3>
           <p className='text-gray-700 inline'>
             {' : '}
-            {showData?.SkuID}
+            {showData?.SkuUniqueId}
           </p>
         </div>
         <div>

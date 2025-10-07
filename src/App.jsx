@@ -111,7 +111,7 @@ function App() {
       )}
 
       {/* Display Result */}
-      {showData && Object.keys(showData).length > 0 && (
+      {/* {showData && Object.keys(showData).length > 0 && (
         <div className="mt-6 p-4 border rounded-lg bg-gray-50">
           {Object.entries(showData).map(([key, value]) => (
             <div key={key}>
@@ -123,7 +123,32 @@ function App() {
             </div>
           ))}
         </div>
-      )}
+      )} */}
+
+      {showData && Object.keys(showData).length>0 && (<div className='mt-6 p-4 border rounded-lg bg-gray-50'>
+        <div>
+          <h3 className='text-lg font-semibold mb-2 inline'>SKU Size Name</h3>
+          <p className='text-gray-700 inline'>
+            {' : '}
+            {showData?.SkuSizeName}
+          </p>
+        </div>
+        <div>
+          <h3 className='text-lg font-semibold mb-2 inline'>SKU ID</h3>
+          <p className='text-gray-700 inline'>
+            {' : '}
+            {showData?.SkuID}
+          </p>
+        </div>
+        <div>
+          <h3 className='text-lg font-semibold mb-2 inline'>Code</h3>
+          <p className='text-gray-700 inline'>
+            {' : '}
+            {showData?.ProductCode}
+          </p>
+        </div>
+      </div>)}
+
     </div>
   );
 }
